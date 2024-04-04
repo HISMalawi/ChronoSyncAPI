@@ -1,4 +1,5 @@
 class Ob < ApplicationRecord
+  self.primary_key = "obs_id"
   belongs_to :obs
   belongs_to :person
   belongs_to :concept
