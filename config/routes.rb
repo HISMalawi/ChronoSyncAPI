@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :merge_audits
   resources :relationships
   resources :pharmacy_stock_verifications
   resources :pharmacy_stock_balances
