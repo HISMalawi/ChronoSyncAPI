@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :orders
   resources :obs
   resources :encounters
   resources :drug_orders
