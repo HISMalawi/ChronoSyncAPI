@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :pharmacy_batch_item_reallocations
   resources :pharmacies
   resources :person_names
   resources :person_attributes
