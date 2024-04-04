@@ -1,24 +1,9 @@
-# README
+# ChronoSync API
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Requirements
+The following are the requirements
+* Ruby 3.2.0
+* Mysql 8.0
 
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+## Setup
+To setup, follow these steps
