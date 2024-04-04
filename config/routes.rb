@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :pharmacy_stock_verifications
   resources :pharmacy_stock_balances
   resources :pharmacy_obs
   resources :pharmacy_batches
