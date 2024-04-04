@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :pharmacy_obs
   resources :pharmacy_batches
   resources :pharmacy_batch_items
   resources :pharmacy_batch_item_reallocations
