@@ -49,20 +49,24 @@ class Api::V1::OperationController < ApplicationController
 
   def delete
     model = params[:entity].camelize.constantize
-    record = model.find(site_id: params[:site_id], "#{model.primary_key.split.last}": params[:"#{model.primary_key.split.last}"])
-
+    query_string = "UPDATE #{params[:entity]} SET "
     # Map parameters to model fields dynamically
     params.each do |key, value|
-      if model.respond_to?("#{key}=")
+      if model.new.respond_to?("#{key}=")
         next if model.primary_key.include?(key)
-        record.send("#{key}=", value)
+        next if key == "site_id"
+        next if value.nil?
+        query_string += "#{key} = '#{value}', "
       end
     end
 
-    if model.save
-      render json: model, status: :ok
+    query_string = query_string[0..-3]
+    query_string += " WHERE site_id = #{params[:site_id]} AND #{model.primary_key} = #{params[:id]}"
+
+    if model.connection.execute(query_string)
+      render json: record, status: :ok
     else
-      render json: model, status: :unprocessable_entity
+      render json: record, status: :unprocessable_entity
     end
   end
 
