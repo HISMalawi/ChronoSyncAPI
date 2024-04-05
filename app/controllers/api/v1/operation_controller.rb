@@ -2,19 +2,31 @@
 class Api::V1::OperationController < ApplicationController
   before_action :validate_params
   def create
-    model = params[:entity].camelize.constantize.new
-    query_string = ''
+    model = params[:entity].camelize.constantize
+    query_string = "INSERT INTO #{params[:entity]} VALUES ("
     # Map parameters to model fields dynamically
     params.each do |key, value|
-      if model.respond_to?("#{key}=")
+      if model.new.respond_to?("#{key}=")
         # model.send("#{key}=", value)
-        query_string += " #{key} = '#{value}'"
+        if value.nil?
+          query_string += "null, "
+        else
+          query_string += "'#{value}', "
+        end
       end
     end
-    if model.save
-      render json: model, status: :created
-    else
-      render json: model, status: :unprocessable_entity
+    query_string = "#{query_string[0..-3]})"
+
+=begin
+    render json: {"query": query_string}
+    return
+=end
+
+    begin
+      model.connection.execute(query_string)
+      render json: { 'message': 'Created Successfully' }, status: :created
+    rescue ActiveRecord::StatementInvalid => e
+      render json: { 'error': 'Failed to create', 'message': e.message }, status: :unprocessable_entity
     end
   end
   def update
