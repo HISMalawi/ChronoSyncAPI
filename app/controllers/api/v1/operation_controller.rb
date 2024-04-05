@@ -17,11 +17,6 @@ class Api::V1::OperationController < ApplicationController
     end
     query_string = "#{query_string[0..-3]})"
 
-=begin
-    render json: {"query": query_string}
-    return
-=end
-
     begin
       model.connection.execute(query_string)
       render json: { 'message': 'Created Successfully' }, status: :created
@@ -31,7 +26,6 @@ class Api::V1::OperationController < ApplicationController
   end
   def update
     model = params[:entity].camelize.constantize
-    record = model.where(site_id: params[:site_id], "#{model.primary_key.split.last}": params[:id])
     query_string = "UPDATE #{params[:entity]} SET "
     # Map parameters to model fields dynamically
     params.each do |key, value|
