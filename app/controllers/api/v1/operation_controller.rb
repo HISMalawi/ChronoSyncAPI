@@ -2,10 +2,20 @@
 class Api::V1::OperationController < ApplicationController
   before_action :validate_params
   def create
-    #params[:entity]
-    render json: {"status": "creating"}
+    model = params[:entity].camelize.constantize.new
+        
+    # Map parameters to model fields dynamically
+    params.each do |key, value|
+      if model.respond_to?("#{key}=")
+        model.send("#{key}=", value)
+      end
+    end
+    if model.save
+      render json: model, status: :created
+    else
+      render json: model, status: :unprocessable_entity
+    end
   end
-
   def update
     render json: {"status": "updating"}
   end
@@ -22,4 +32,7 @@ class Api::V1::OperationController < ApplicationController
     params.permit!
   end
 
+  def create_params
+    model = params[:entity]
+  end
 end
