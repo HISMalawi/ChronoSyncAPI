@@ -1,4 +1,4 @@
 class Person < ApplicationRecord
   self.table_name = "person"
-  self.primary_key = "person_id"
+  self.primary_key = "site_id, person_id"
 end

@@ -17,11 +17,41 @@ class Api::V1::OperationController < ApplicationController
     end
   end
   def update
-    render json: {"status": "updating"}
+    model = params[:entity].camelize.constantize
+    record = model.find(site_id: params[:site_id], "#{model.primary_key.split.last}": params[:"#{model.primary_key.split.last}"])
+
+    # Map parameters to model fields dynamically
+    params.each do |key, value|
+      if model.respond_to?("#{key}=")
+        next if model.primary_key.include?(key)
+        record.send("#{key}=", value)
+      end
+    end
+
+    if model.save
+      render json: model, status: :ok
+    else
+      render json: model, status: :unprocessable_entity
+    end
   end
 
   def delete
-    render json: {"status": "deleting"}
+    model = params[:entity].camelize.constantize
+    record = model.find(site_id: params[:site_id], "#{model.primary_key.split.last}": params[:"#{model.primary_key.split.last}"])
+
+    # Map parameters to model fields dynamically
+    params.each do |key, value|
+      if model.respond_to?("#{key}=")
+        next if model.primary_key.include?(key)
+        record.send("#{key}=", value)
+      end
+    end
+
+    if model.save
+      render json: model, status: :ok
+    else
+      render json: model, status: :unprocessable_entity
+    end
   end
 
   private
